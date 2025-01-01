@@ -1,0 +1,283 @@
+.spinner-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  visibility: visible;
+}
+
+.spinner-container.hidden {
+  visibility: hidden;
+}
+
+#spinner-svg {
+  animation: rotateSpinner 2s linear infinite; 
+}
+
+@keyframes rotateSpinner {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+#loading-text {
+  margin-top: 10px; 
+  font-size: 16px;
+  color: #094f0c; 
+  text-align: center;
+  font-weight: bold;
+}
+
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-color: #e1eae2;
+  height: 88vh;
+  padding: 0 10px;
+}
+
+nav {
+  background-color: #ffffff;
+  padding: 24px 190px 24px 190px;
+}
+
+.main-card {
+  position: relative;
+  width: 80%;
+  max-width: 600px;
+  min-height: 60vh;
+  padding: 40px 20px 20px 20px;
+  border-radius: 20px;
+  background-color: #ffffff;
+  color: #094f0c;
+  margin: auto;
+  display: flex;
+  flex-direction: column; 
+}
+
+.main-card div:first-child {
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 32px;
+  color: #094f0c;
+}
+
+.main-card button {
+  text-align: center;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.main-table {
+  width: 100%;
+  text-align: left;
+  color: #094f0c;
+  margin: 1em 0 1em 0;
+}
+
+th {
+  height: 24px;
+  font-weight: normal;
+}
+
+.productline-items-table th {
+  background-color: #094f0c;
+  color: #ffffff;
+  padding: 10px;
+}
+
+.productline-items-table {
+  width: 100%;
+  border-collapse: separate; 
+  border-spacing: 0; 
+  border-radius: 12px; 
+  overflow: hidden; 
+  border: solid 1px #094f0c;
+}
+
+.productline-items-table thead th,
+.productline-items-table tr,
+.productline-items-table td {
+  border: solid 1px #094f0c;
+  padding: 10px;
+}
+
+.productline-items-table td {
+  color: black;
+}
+
+.productline-items-table tbody tr:last-child td:first-child {
+  border-bottom-left-radius: 12px;
+}
+
+.productline-items-table tbody tr:last-child td:last-child {
+  border-bottom-right-radius: 12px;
+}
+
+
+.payment-btn {
+  background-color: #094f0c;
+  color: #c2f291;
+  font-weight: 600;
+  font-size: 14px;
+  height: 44px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 346px;
+  border: none;
+  cursor: pointer;
+  margin-top: 1em;
+}
+
+#transaction-details-table {
+  font-size: 16px;
+  line-height: 24px;
+  text-align: left;
+  color: #094f0c;
+  max-width: 600px;
+  margin-top: 1em;
+  overflow: scroll;
+}
+
+#message {
+  font-weight: 600;
+  font-size: 16px;
+  margin: 2em;
+  text-align: center;
+}
+
+#status-amount {
+  font-size: 16px;
+  font-weight: 600;
+  color: #094f0c;
+  line-height: 24px;
+}
+
+#status-heading {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 32px;
+  color: #094f0c;
+  margin: 0 auto;
+  max-width: 600px;
+  text-align: left;
+}
+
+.transaction-main-card {
+  width: 90%;
+  max-width: 600px;
+  padding: 40px;
+  gap: 32px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column; 
+  align-items: flex-start;
+}
+
+#message.error {
+  color: #ae1414;
+}
+
+#message.success {
+  color: #094f0c;
+}
+
+/* Media Queries for Responsive Design */
+
+/* Mobile (Small screens) */
+@media (max-width: 480px) {
+  .main-card {
+    width: 100%;
+    padding: 20px;
+  }
+
+  .productline-items-table {
+    width: 100%;
+    max-width: none;
+    border-radius: 10px;
+    overflow-x: auto; /* Allow horizontal scrolling */
+  }
+
+  .productline-items-table td, .productline-items-table th {
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  #transaction-details-table {
+    font-size: 14px;
+    overflow-x: auto; /* Allow horizontal scrolling */
+  }
+
+  #loading-text {
+    font-size: 14px;
+  }
+}
+
+/* Tablet (Medium screens) */
+@media (max-width: 768px) {
+  .main-card {
+    width: 90%;
+    padding: 30px;
+  }
+
+  .productline-items-table {
+    width: 100%;
+    overflow-x: auto; /* Allow horizontal scrolling */
+  }
+
+  .productline-items-table td, .productline-items-table th {
+    padding: 10px;
+    font-size: 16px;
+  }
+
+  #transaction-details-table {
+    font-size: 15px;
+    overflow-x: auto;
+  }
+
+  #loading-text {
+    font-size: 16px;
+  }
+}
+
+/* Laptop (Large screens) */
+@media (max-width: 1024px) {
+  .main-card {
+    width: 85%;
+    padding: 40px;
+  }
+
+  .productline-items-table {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .productline-items-table td, .productline-items-table th {
+    padding: 12px;
+    font-size: 16px;
+  }
+
+  #transaction-details-table {
+    font-size: 16px;
+    overflow-x: auto;
+  }
+
+  #loading-text {
+    font-size: 18px;
+  }
+}

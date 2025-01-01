@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./payment-page.css">
+    <link rel="icon" href="assets/favicon.svg" type="image/x-icon">
+    <title>Dibber</title>
+</head>
+
+<body>
+    <nav>
+        <img src="./assets/Logo.png" alt="dibber_logo">
+    </nav>
+    <main>
+
+        <div id="spinner" class="spinner-container">
+            <div id="spinner-svg"></div>
+            <p id="loading-text">Loading...</p>
+        </div>
+        <section id="card" class="main-card" style="visibility: hidden;">
+            <div>Admission fee payment</div>
+            <div>
+                <table class="main-table">
+                    <tr>
+                        <th>Parent Name:</th>
+                        <td id="parent-name"></td>
+                    </tr>
+                    <tr>
+                        <th>Academic Year:</th>
+                        <td id="academic-year"></td>
+                    </tr>
+                    <tr>
+                        <th>Dibber Unit Name:</th>
+                        <td id="dibber-unit-name"></td>
+                    </tr>
+                    <tr>
+                        <th>Payment Plan:</th>
+                        <td id="payment-plan"></td>
+                    </tr>
+                    <tr>
+                        <th>Receiver Name:</th>
+                        <td id="receiver-name"></td>
+                    </tr>
+                    <tr>
+                        <th>Total Payable:</th>
+                        <td id="total-payable"></td>
+                    </tr>
+                    <tr>
+                        <th>Child ID:</th>
+                        <td id="child-id"></td>
+                    </tr>
+                </table>
+                <table class="productline-items-table">
+                    <thead>
+
+                        <th>Sl no</th>
+                        <th>Category</th>
+                        <th>Category Type</th>
+                        <th>Category Subtype</th>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Net Price</th>
+                    </thead>
+                    <tbody id="product-line-items">
+
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <button type="submit" class="payment-btn" id="payment-btn" onclick="handlePayment()">Proceed to
+                    payment</button>
+            </div>
+
+
+        </section>
+        <section id="transaction-status" class="transaction-main-card" style="display:none;">
+            <div id="status-heading"></div>
+
+            <div id="status-header">
+                <div id="status-icon"></div>
+                <div id="status-amount" class="status-amount"></div>
+            </div>
+
+            <div>
+                <table id="transaction-details-table">
+                    <tbody>
+                        <!-- Transaction details will be dynamically inserted here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="message"></div>
+            <div id="return-btn">
+                <button type="submit" class="payment-btn" id="payment-btn-return" onclick="returnToPayment()">Return to
+                    Payments</button>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="./payment-page.js">
+    </script>
+
+    <script>
+        const spinnerContainer = document.getElementById('spinner');
+
+
+        function handlePayment() {
+           
+            spinnerContainer.classList.remove('hidden');
+            loadSpinner();
+
+            document.getElementById("card").style.display = "none"; 
+            document.getElementById("payment-btn").disabled = true; 
+
+            setTimeout(() => {
+
+                const response = simulateApiResponse("success");
+
+                displayTransactionStatus(response);
+            }, 2000); 
+            setTimeout(() => {
+
+                const response = simulateApiResponse("pending");
+
+                displayTransactionStatus(response);
+            }, 8000); 
+
+            setTimeout(() => {
+
+                const response = simulateApiResponse("failed"); 
+
+                displayTransactionStatus(response);
+            }, 16000);
+        }
+
+        function simulateApiResponse(status) {
+        
+            if (status == "success") {
+                bankRefToDisplay = "SBIN0099XXXXXXXXXXXXX";
+                failureReasonToDisplay = "Your payment was successful, you will receive a mail with a downloadable receipt in some time.";
+            } else if (status == "pending") {
+                bankRefToDisplay = "-----";
+                failureReasonToDisplay = "Your payment is pending confirmation from the bank, please do not close or refresh the page until a Success or Failure message appears.";
+            }
+            else if (status == "failed") {
+                bankRefToDisplay = "-----";
+                failureReasonToDisplay = "Your transaction was failed due to: Insufficient funds";
+
+            }
+            return {
+                status: status,
+                amount: "₹350000",
+                transactionId: "1234567890",
+                paymentPlan: "Year",
+                transactionDate: "14:55, 11-March-2024",
+                paymentType: "NEFT",
+                bankRefNo: bankRefToDisplay,
+                failureReason: failureReasonToDisplay,
+            };
+        }
+
+        function displayTransactionStatus(response) {
+            const statusIcon = document.getElementById("status-icon");
+            const statusHeading = document.getElementById("status-heading");
+            const transactionDetails = document.getElementById("transaction-details-table");
+            const message = document.getElementById("message");
+            const amountElement = document.getElementById("status-amount");
+            const returnBtn = document.getElementById("return-btn");
+            const { status, amount, transactionId, paymentPlan, transactionDate, paymentType, bankRefNo, failureReason } = response;
+
+            // Hide payment button
+            document.getElementById("return-btn").style.display = "none";
+
+            // Show the status section
+            document.getElementById("transaction-status").style.display = "block";
+
+            if (status === "success") {
+                statusIcon.innerHTML = `<img src="assets/success.svg" alt="Success">`; // Replace with appropriate icon
+                amountElement.textContent = "Amount : " + amount; // Set amount dynamically
+                statusHeading.textContent = "Transaction Successful";
+                message.classList.add('success');
+
+            } else if (status === "pending") {
+                statusIcon.innerHTML = `<img src="assets/pending.svg" alt="Pending">`; // Replace with appropriate icon
+                amountElement.textContent = "Amount : " + amount; // Set amount dynamically
+                statusHeading.textContent = "Transaction Pending";
+                message.classList.remove('success');
+                message.classList.add('error');
+
+            } else if (status === "failed") {
+                statusIcon.innerHTML = `<img src="assets/failed.svg" alt="Failure">`; // Replace with appropriate icon
+                amountElement.textContent = "Amount : " + amount; // Set amount dynamically
+                statusHeading.textContent = "Transaction Failed";
+                document.getElementById("return-btn").style.display = "block";
+                message.classList.remove('success');
+                message.classList.add('error');
+
+            }
+            message.innerHTML = failureReason;
+            transactionDetails.innerHTML = "";
+
+            // Insert the transaction details into the table
+            transactionDetails.innerHTML = `
+                <tr>
+                    <td>Transaction ID:</td>
+                    <td>${transactionId}</td>
+                </tr>
+                <tr>
+                    <td>Authorisation status:</td>
+                    <td>${status === "success" ? "Payment successful" : "Awaiting response from bank"}</td>
+                </tr>
+                <tr>
+                    <td>Transaction made on:</td>
+                    <td>${transactionDate}</td>
+                </tr>
+                <tr>
+                    <td>Payment type:</td>
+                    <td>${paymentType}</td>
+                </tr>
+                <tr>
+                    <td>Bank ref no.:</td>
+                    <td>${bankRefNo}</td>
+                </tr>
+                `;
+
+            spinnerContainer.classList.add('hidden');
+
+        }
+
+        function returnToPayment() {
+            document.getElementById("card").style.display = "block"; // Hide status section initially
+            document.getElementById("payment-btn").disabled = false; // Disable the button to prevent multiple clicks
+            document.getElementById("transaction-status").style.display = "none";
+
+        }
+    </script>
+</body>
+
+</html>
